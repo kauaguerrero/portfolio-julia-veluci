@@ -184,6 +184,8 @@ export default function SocialCards({ cards }: SocialCardsProps) {
         const target = {
           x: `${x * multiplier}rem`,
           y: `${(isNewCenter ? y - 2 : y) * multiplier * hMult}rem`,
+          xPercent: -50,
+          yPercent: -50,
           rotation: rot,
           scale: isNewCenter ? scale * 1.04 : scale,
           opacity: 1,
@@ -195,6 +197,8 @@ export default function SocialCards({ cards }: SocialCardsProps) {
           gsap.set(card, {
             x: 0,
             y: `${12 * hMult}rem`,
+            xPercent: -50,
+            yPercent: -50,
             rotation: 0,
             scale: 0.5,
             opacity: 0,
@@ -211,6 +215,8 @@ export default function SocialCards({ cards }: SocialCardsProps) {
           gsap.set(card, {
             x: `${enterX}rem`,
             y: `${y * multiplier * hMult}rem`,
+            xPercent: -50,
+            yPercent: -50,
             rotation: direction === "right" ? 30 : -30,
             scale: 0.5,
             opacity: 0,
@@ -235,6 +241,8 @@ export default function SocialCards({ cards }: SocialCardsProps) {
         const exitX = direction === "right" ? -40 : 40;
         gsap.to(card, {
           x: `${exitX}rem`,
+          xPercent: -50,
+          yPercent: -50,
           opacity: 0,
           scale: 0.5,
           rotation: direction === "right" ? -30 : 30,
@@ -243,7 +251,15 @@ export default function SocialCards({ cards }: SocialCardsProps) {
           zIndex: 0,
         });
       } else if (isFirstMount) {
-        gsap.set(card, { opacity: 0, scale: 0.3, x: 0, y: 0, zIndex: 0 });
+        gsap.set(card, {
+          opacity: 0,
+          scale: 0.3,
+          x: 0,
+          y: 0,
+          xPercent: -50,
+          yPercent: -50,
+          zIndex: 0,
+        });
       }
     });
 
@@ -265,6 +281,8 @@ export default function SocialCards({ cards }: SocialCardsProps) {
         gsap.to(el, {
           x: `${base.x * mult}rem`,
           y: `${base.y * mult * hM}rem`,
+          xPercent: -50,
+          yPercent: -50,
           rotation: base.rot,
           scale: base.scale,
           zIndex: base.zIndex,
