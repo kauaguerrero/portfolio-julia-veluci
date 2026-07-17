@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Poppins", "Inter", system-ui, sans-serif;
+
+  --color-blush: #fadadd;
+  --color-blush-light: #fdf1f2;
+  --color-blush-dark: #f2b9c1;
+  --color-ink: #1a1a1a;
+  --color-charcoal: #2b2b2b;
+  --color-cloud: #f7f7f7;
+  --color-mist: #e9e7e8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: #ffffff;
+  color: var(--color-charcoal);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-blush);
+  color: var(--color-ink);
+}
+
+/* Card fan carousel — sizes match the breakpoints assumed by
+   getHeightMultiplier()/getResponsiveMultiplier() in card-fan-carousel.tsx */
+.fan-layout {
+  position: relative;
+  height: 22rem;
+}
+@media (min-width: 480px) {
+  .fan-layout {
+    height: 26rem;
+  }
+}
+@media (min-width: 640px) {
+  .fan-layout {
+    height: 28rem;
+  }
+}
+@media (min-width: 768px) {
+  .fan-layout {
+    height: 34rem;
+  }
+}
+@media (min-width: 1024px) {
+  .fan-layout {
+    height: 38rem;
+  }
+}
+
+.fan-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* `translate` is independent from `transform` (which GSAP animates via
+     x/y/rotation/scale), so this keeps the card centered without fighting
+     the library's transform matrix. */
+  translate: -50% -50%;
+  height: 65%;
+  aspect-ratio: 9 / 16;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: var(--color-cloud);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  will-change: transform;
+  transition: box-shadow 0.3s ease;
+}
+
+.fan-card.is-active {
+  box-shadow:
+    0 0 0 4px var(--color-blush),
+    0 20px 45px rgba(0, 0, 0, 0.28);
+}
