@@ -25,9 +25,13 @@ export default function Navbar() {
         scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
       }`}
     >
-      <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#inicio" className="font-medium text-lg tracking-wide text-ink">
-          Julia Veluci
+      <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-2">
+        <a href="#inicio" className="shrink-0">
+          <img
+            src="/logo.svg"
+            alt="Julia Veluci Sperandir"
+            className="h-16 md:h-20 w-auto"
+          />
         </a>
 
         <ul className="hidden md:flex items-center gap-8 text-sm text-charcoal">

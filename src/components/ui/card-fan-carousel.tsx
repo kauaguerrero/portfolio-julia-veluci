@@ -51,15 +51,20 @@ function getHeightMultiplier(width: number) {
 
 function getSlotConfig(totalCards: number, slot: number) {
   if (totalCards >= MAX_VISIBLE) return FAN_POSITIONS[slot];
-  const center = totalCards >> 1;
-  const distance = totalCards > 1 ? (slot - center) / center : 0;
+  // The midpoint of the slot range, not `totalCards >> 1` — for an even
+  // card count that integer center leaves one extra slot on one side,
+  // making the whole fan drift off-center (e.g. 6 cards: slots 0..5 with
+  // center=3 gives distances -1..+0.667, skewing everything left).
+  const trueCenter = (totalCards - 1) / 2;
+  const halfSpan = trueCenter || 1;
+  const distance = (slot - trueCenter) / halfSpan;
   const absDistance = Math.abs(distance);
   return {
     rot: distance * 21,
     scale: 1.0 - 0.2244 * absDistance * absDistance,
     x: distance * 30,
     y: absDistance * absDistance * 7.3,
-    zIndex: 10 - Math.abs(slot - center),
+    zIndex: 10 - Math.round(Math.abs(slot - trueCenter)),
   };
 }
 
