@@ -38,33 +38,42 @@ function getResponsiveMultiplier(width: number) {
  */
 function getHeightMultiplier(width: number) {
   let idealPx: number;
-  if (width < 480) idealPx = 22 * 16;
-  else if (width < 640) idealPx = 26 * 16;
-  else if (width < 768) idealPx = 28 * 16;
-  else if (width < 1024) idealPx = 34 * 16;
-  else idealPx = 38 * 16;
+  if (width < 480) idealPx = 18 * 16;
+  else if (width < 640) idealPx = 21 * 16;
+  else if (width < 768) idealPx = 23 * 16;
+  else if (width < 1024) idealPx = 28 * 16;
+  else idealPx = 32 * 16;
 
   const available = window.innerHeight * 0.7;
   if (available >= idealPx) return 1;
   return available / idealPx;
 }
 
+// Reference half-spread used to normalize the fan curve — kept fixed
+// (matching the 7-slot FAN_POSITIONS table's own half-width) instead of
+// scaling with the actual card count, so the step size per slot stays
+// consistent regardless of how many cards are showing.
+const SPREAD_NORM = 3;
+
 function getSlotConfig(totalCards: number, slot: number) {
   if (totalCards >= MAX_VISIBLE) return FAN_POSITIONS[slot];
-  // The midpoint of the slot range, not `totalCards >> 1` — for an even
-  // card count that integer center leaves one extra slot on one side,
-  // making the whole fan drift off-center (e.g. 6 cards: slots 0..5 with
-  // center=3 gives distances -1..+0.667, skewing everything left).
-  const trueCenter = (totalCards - 1) / 2;
-  const halfSpan = trueCenter || 1;
-  const distance = (slot - trueCenter) / halfSpan;
+  // `center` is always an integer slot — the active/selected card is
+  // mapped to exactly this slot (see getVisibleMap), so anchoring the
+  // distance calc here (rather than a fractional true-center) guarantees
+  // the selected card always renders at x=0, dead center. The trade-off
+  // with an even card count is the two edges reach slightly different
+  // extremes (one side has one more step than the other) — much less
+  // noticeable than the selected card itself sitting off-center.
+  const center = totalCards >> 1;
+  const step = slot - center;
+  const distance = step / SPREAD_NORM;
   const absDistance = Math.abs(distance);
   return {
     rot: distance * 21,
     scale: 1.0 - 0.2244 * absDistance * absDistance,
     x: distance * 30,
     y: absDistance * absDistance * 7.3,
-    zIndex: 10 - Math.round(Math.abs(slot - trueCenter)),
+    zIndex: 10 - Math.abs(step),
   };
 }
 

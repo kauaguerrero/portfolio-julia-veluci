@@ -35,26 +35,26 @@ body {
    getHeightMultiplier()/getResponsiveMultiplier() in card-fan-carousel.tsx */
 .fan-layout {
   position: relative;
-  height: 22rem;
+  height: 18rem;
 }
 @media (min-width: 480px) {
   .fan-layout {
-    height: 26rem;
+    height: 21rem;
   }
 }
 @media (min-width: 640px) {
   .fan-layout {
-    height: 28rem;
+    height: 23rem;
   }
 }
 @media (min-width: 768px) {
   .fan-layout {
-    height: 34rem;
+    height: 28rem;
   }
 }
 @media (min-width: 1024px) {
   .fan-layout {
-    height: 38rem;
+    height: 32rem;
   }
 }
 
