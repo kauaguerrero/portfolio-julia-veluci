@@ -113,11 +113,6 @@ export const videoEmbeds: VideoEmbed[] = [
     url: "https://www.instagram.com/reel/DaVb0_4u0fo/",
   },
   {
-    id: 2,
-    label: "Conteúdo UGC",
-    url: "https://www.instagram.com/s/aGlnaGxpZ2h0OjE4MTEyNDg0MjAzOTI1MTYw?story_media_id=3489068770394047588&igsh=MW81bm04NXRzaWYwdQ%3D%3D",
-  },
-  {
     id: 3,
     label: "Provador",
     url: "https://www.instagram.com/reel/DagwgjLIsef/",

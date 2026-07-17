@@ -64,7 +64,7 @@ function getSlotConfig(totalCards: number, slot: number) {
 }
 
 const ARROW_CLASSES =
-  "relative flex items-center justify-center rounded-full border-[1.5px] border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 backdrop-blur-[16px] text-black/40 dark:text-white/55 cursor-pointer shrink-0 z-30 outline-none shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-black/25 dark:hover:border-white/25 hover:text-black/70 dark:hover:text-white/80 active:opacity-70 transition-colors duration-300 before:content-[''] before:absolute before:inset-[3px] before:rounded-full before:border before:border-black/[0.04] dark:before:border-white/[0.04] before:pointer-events-none";
+  "relative flex items-center justify-center rounded-full border border-mist bg-white text-ink cursor-pointer shrink-0 z-30 outline-none shadow-md hover:border-blush-dark hover:text-blush-dark active:opacity-70 transition-colors duration-300";
 
 export default function SocialCards({ cards }: SocialCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -178,7 +178,7 @@ export default function SocialCards({ cards }: SocialCardsProps) {
         // the "coming forward" zoom feel instead of a flat reposition.
         const target = {
           x: `${x * multiplier}rem`,
-          y: `${(isNewCenter ? y - 2 : y) * hMult}rem`,
+          y: `${(isNewCenter ? y - 2 : y) * multiplier * hMult}rem`,
           rotation: rot,
           scale: isNewCenter ? scale * 1.04 : scale,
           opacity: 1,
@@ -205,23 +205,23 @@ export default function SocialCards({ cards }: SocialCardsProps) {
           const enterX = direction === "right" ? 40 : -40;
           gsap.set(card, {
             x: `${enterX}rem`,
-            y: `${y * hMult}rem`,
+            y: `${y * multiplier * hMult}rem`,
             rotation: direction === "right" ? 30 : -30,
             scale: 0.5,
             opacity: 0,
           });
           gsap.to(card, {
             ...target,
-            duration: 0.7,
-            ease: "elastic.out(1,.75)",
+            duration: 0.5,
+            ease: "back.out(1.6)",
             onComplete: onCardDone,
           });
         } else {
           gsap.to(card, {
             ...target,
-            duration: 0.7,
-            delay: distanceFromCenter * 0.03,
-            ease: "elastic.out(1,.75)",
+            duration: 0.65,
+            delay: distanceFromCenter * 0.05,
+            ease: "power3.out",
             overwrite: "auto",
             onComplete: onCardDone,
           });
@@ -251,18 +251,6 @@ export default function SocialCards({ cards }: SocialCardsProps) {
       if (slot !== undefined) visibleEntries.push({ el, slot, cardIndex: i });
     });
 
-    // Hovering a card spins the whole wheel so that card lands in the
-    // center — not a fan push-apart, an actual rotation.
-    const enterHandlers = visibleEntries.map(({ el, cardIndex }) => {
-      const handler = () => {
-        if (cardIndex === centerIndex) return;
-        if (needsPagination && isAnimating.current) return;
-        jumpTo(cardIndex);
-      };
-      el.addEventListener("mouseenter", handler);
-      return { el, handler };
-    });
-
     const applyLayout = () => {
       if (isAnimating.current) return;
       const mult = getResponsiveMultiplier(window.innerWidth);
@@ -271,7 +259,7 @@ export default function SocialCards({ cards }: SocialCardsProps) {
         const base = config(slot);
         gsap.to(el, {
           x: `${base.x * mult}rem`,
-          y: `${base.y * hM}rem`,
+          y: `${base.y * mult * hM}rem`,
           rotation: base.rot,
           scale: base.scale,
           zIndex: base.zIndex,
@@ -284,22 +272,19 @@ export default function SocialCards({ cards }: SocialCardsProps) {
     window.addEventListener("resize", applyLayout);
 
     return () => {
-      enterHandlers.forEach(({ el, handler }) =>
-        el.removeEventListener("mouseenter", handler),
-      );
       window.removeEventListener("resize", applyLayout);
     };
-  }, [centerIndex, totalCards, getVisibleMap, needsPagination, jumpTo]);
+  }, [centerIndex, totalCards, getVisibleMap, needsPagination]);
 
   if (!totalCards) return null;
 
   const chevron = (direction: "left" | "right") => (
     <svg
-      className="relative z-[2] w-4 h-4 md:w-5 md:h-5"
+      className="relative z-[2] w-5 h-5"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="3"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
@@ -350,11 +335,7 @@ export default function SocialCards({ cards }: SocialCardsProps) {
       </div>
 
       {totalCards > 1 && (
-        <div
-          className={`items-center justify-center gap-4 mt-6 z-30 ${
-            needsPagination ? "flex" : "flex md:hidden"
-          }`}
-        >
+        <div className="flex items-center justify-center gap-4 mt-8 md:mt-6 z-30">
           <button
             className={`${ARROW_CLASSES} w-10 h-10 md:w-12 md:h-12`}
             onClick={() => cycle("left")}

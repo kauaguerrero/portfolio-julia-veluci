@@ -9,7 +9,7 @@ export default function Audience() {
       className="bg-white"
       eyebrow="Nichos atendidos"
       title="Para quem é meu trabalho"
-      subtitle="Atendo negócios de todos os tamanhos, da loja da minha cidade a marcas internacionais."
+      subtitle="Atendendo negócios de todos os tamanhos."
     >
       <div className="flex flex-wrap justify-center gap-3">
         {audience.map((item, i) => (
